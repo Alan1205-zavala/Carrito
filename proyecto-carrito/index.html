@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechShop - Tienda Online</title>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Nuestros estilos -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/cart.css">
+</head>
+<body>
+    <!-- Cabecera -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Tech<span>Shop</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Inicio</a></li>
+                    <li><a href="#">Productos</a></li>
+                    <li><a href="#">Ofertas</a></li>
+                    <li><a href="#">Contacto</a></li>
+                    <li><a href="providers.html" class="provider-link">Proveedores</a></li>
+                </ul>
+            </nav>
+            <div class="cart-icon">
+                <div class="cart-count">0</div>
+                <i class="fas fa-shopping-cart" id="cart-btn"></i>
+            </div>
+            <div class="user-actions hidden" id="user-actions">
+                <div class="user-menu">
+                    <button class="user-menu-btn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="user-name">Usuario</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="profile.html"><i class="fas fa-user"></i> Mi Perfil</a>
+                        <a href="#"><i class="fas fa-shopping-bag"></i> Mis Pedidos</a>
+                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+            <div class="auth-buttons" id="auth-buttons">
+                <a href="login.html" class="btn btn-sm">Iniciar Sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner principal -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Las mejores ofertas en tecnología</h2>
+                <p>Descubre nuestros productos más vendidos con envío gratuito</p>
+                <a href="#products" class="btn">Ver productos</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productos -->
+    <section id="products" class="products">
+        <div class="container">
+            <h2 class="section-title">Nuestros Productos</h2>
+            <div class="products-grid" id="products-container">
+                <!-- Los productos se cargarán dinámicamente desde JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrito de compras (oculto inicialmente) -->
+    <div class="cart-overlay" id="cart-overlay">
+        <div class="cart">
+            <div class="cart-header">
+                <h3>Tu Carrito</h3>
+                <button class="close-cart" id="close-cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Los items del carrito se cargarán dinámicamente -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-summary">
+                    <div class="summary-item">
+                        <span>Subtotal:</span>
+                        <span id="cart-subtotal">$0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>IVA (16%):</span>
+                        <span id="cart-tax">$0.00</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Total:</span>
+                        <span id="cart-total">$0.00</span>
+                    </div>
+                </div>
+                <div class="cart-buttons">
+                    <button class="btn btn-clear" id="clear-cart">Vaciar carrito</button>
+                    <div id="paypal-button-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de recibo (oculto inicialmente) -->
+    <div class="modal" id="receipt-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Recibo de Compra</h3>
+                <button class="close-modal" id="close-receipt">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="receipt-content">
+                <!-- El contenido del recibo se generará dinámicamente -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="download-receipt">Descargar PDF</button>
+                <button class="btn btn-secondary" id="close-receipt-btn">Cerrar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Indicador de modo Sandbox -->
+    <div class="sandbox-indicator">
+        Modo de Pruebas (Sandbox)
+    </div>
+
+    <!-- Scripts -->
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=MXN&locale=es_MX"></script>
+    <!-- HTML2PDF para generar PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Nuestros scripts -->
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/paypal-integration.js"></script>
+    <script src="js/receipt.js"></script>
+</body>
+</html>
