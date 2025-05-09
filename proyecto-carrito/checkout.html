@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechShop - Checkout</title>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Nuestros estilos -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/checkout.css">
+</head>
+<body>
+    <!-- Cabecera -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Tech<span>Shop</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="ofertas.html">Ofertas</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <div class="user-menu">
+                    <button class="user-menu-btn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="user-name">Usuario</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="profile.html"><i class="fas fa-user"></i> Mi Perfil</a>
+                        <a href="#"><i class="fas fa-shopping-bag"></i> Mis Pedidos</a>
+                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección principal de checkout -->
+    <div class="checkout-container">
+        <div class="container">
+            <div class="checkout-header">
+                <h2>Finalizar Compra</h2>
+                <div class="checkout-steps">
+                    <div class="step active">
+                        <span class="step-number">1</span>
+                        <span class="step-text">Carrito</span>
+                    </div>
+                    <div class="step-divider"></div>
+                    <div class="step active">
+                        <span class="step-number">2</span>
+                        <span class="step-text">Checkout</span>
+                    </div>
+                    <div class="step-divider"></div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <span class="step-text">Confirmación</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="checkout-content">
+                <!-- Formulario principal -->
+                <div class="checkout-form-container">
+                    <form id="checkout-form" class="checkout-form">
+                        <!-- Sección de dirección de envío -->
+                        <div class="checkout-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-map-marker-alt"></i> Dirección de Envío
+                            </h3>
+                            
+                            <!-- Selección de dirección existente para usuarios logueados -->
+                            <div id="saved-addresses" class="saved-addresses hidden">
+                                <div class="form-label">Selecciona una dirección guardada:</div>
+                                <div class="addresses-grid" id="addresses-grid">
+                                    <!-- Se cargarán dinámicamente -->
+                                </div>
+                                
+                                <div class="new-address-option">
+                                    <button type="button" id="new-address-btn" class="btn-text">
+                                        <i class="fas fa-plus"></i> Añadir nueva dirección
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Formulario de dirección para nueva dirección -->
+                            <div id="address-form-fields">
+                                <div class="form-row two-columns">
+                                    <div class="form-group">
+                                        <label for="first-name">Nombre</label>
+                                        <input type="text" id="first-name" name="first-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="last-name">Apellidos</label>
+                                        <input type="text" id="last-name" name="last-name" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="street">Calle y número</label>
+                                        <input type="text" id="street" name="street" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row two-columns">
+                                    <div class="form-group">
+                                        <label for="city">Ciudad</label>
+                                        <input type="text" id="city" name="city" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="state">Estado</label>
+                                        <input type="text" id="state" name="state" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row two-columns">
+                                    <div class="form-group">
+                                        <label for="zip">Código Postal</label>
+                                        <input type="text" id="zip" name="zip" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="country">País</label>
+                                        <input type="text" id="country" name="country" value="México" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="phone">Teléfono</label>
+                                        <input type="tel" id="phone" name="phone" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="email">Correo electrónico</label>
+                                        <input type="email" id="email" name="email" required>
+                                    </div>
+                                </div>
+                                
+                                <!-- Guardar dirección (solo para usuarios logueados) -->
+                                <div id="save-address-option" class="form-checkbox hidden">
+                                    <input type="checkbox" id="save-address" name="save-address">
+                                    <label for="save-address">Guardar esta dirección para futuras compras</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sección de método de pago -->
+                        <div class="checkout-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-credit-card"></i> Método de Pago
+                            </h3>
+                            
+                            <div class="payment-methods">
+                                <div class="payment-method active" data-method="card">
+                                    <input type="radio" name="payment-method" id="method-card" value="card" checked>
+                                    <label for="method-card">
+                                        <i class="far fa-credit-card"></i>
+                                        <span>Tarjeta de crédito/débito</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Formulario de tarjeta de crédito -->
+                            <div id="card-form" class="payment-form">
+                                <div class="card-wrapper">
+                                    <div class="card-container">
+                                        <div class="card-preview">
+                                            <div class="card-front">
+                                                <div class="card-type" id="card-type-icon">
+                                                    <i class="far fa-credit-card"></i>
+                                                </div>
+                                                <div class="card-number" id="card-number-preview">•••• •••• •••• ••••</div>
+                                                <div class="card-details">
+                                                    <div class="card-holder">
+                                                        <div class="label">Titular</div>
+                                                        <div class="value" id="card-holder-preview">NOMBRE COMPLETO</div>
+                                                    </div>
+                                                    <div class="card-expiry">
+                                                        <div class="label">Expira</div>
+                                                        <div class="value" id="card-expiry-preview">MM/YY</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-back">
+                                                <div class="card-stripe"></div>
+                                                <div class="card-cvv">
+                                                    <div class="cvv-band">
+                                                        <div class="cvv-value" id="card-cvv-preview">•••</div>
+                                                    </div>
+                                                    <div class="cvv-label">CVV</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-form">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="card-number">Número de tarjeta</label>
+                                            <div class="input-with-icon">
+                                                <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                                                <span class="card-icon" id="card-icon">
+                                                    <i class="far fa-credit-card"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="card-holder">Nombre del titular</label>
+                                            <input type="text" id="card-holder" name="card-holder" placeholder="Como aparece en la tarjeta" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row two-columns">
+                                        <div class="form-group">
+                                            <label for="card-expiry">Fecha de expiración</label>
+                                            <input type="text" id="card-expiry" name="card-expiry" placeholder="MM/YY" maxlength="5" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="card-cvv">Código de seguridad</label>
+                                            <div class="input-with-icon">
+                                                <input type="text" id="card-cvv" name="card-cvv" placeholder="CVV" maxlength="4" required>
+                                                <span class="cvv-info" id="cvv-info">
+                                                    <i class="fas fa-question-circle"></i>
+                                                </span>
+                                            </div>

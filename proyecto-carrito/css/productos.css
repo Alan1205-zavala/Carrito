@@ -1,0 +1,422 @@
+/* Estilos para la página de administración de productos */
+
+:root {
+    --product-primary: #7e3ff2;
+    --product-secondary: #ff6b6b;
+    --product-accent: #3ae374;
+    --product-dark: #2c3e50;
+    --product-light: #f5f6fa;
+    --product-gray: #a5b1c2;
+    --product-border: #e3e3e3;
+    --product-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --product-transition: all 0.3s ease;
+}
+
+.products-admin-container {
+    padding: 40px 0;
+    background-color: var(--product-light);
+    min-height: calc(100vh - 80px);
+}
+
+.products-admin-header {
+    margin-bottom: 30px;
+}
+
+.products-admin-header h2 {
+    font-size: 1.8rem;
+    color: var(--product-dark);
+    margin-bottom: 5px;
+}
+
+.products-admin-header p {
+    color: var(--product-gray);
+}
+
+/* Controles de administración */
+.admin-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 15px 12px 40px;
+    border: 1px solid var(--product-border);
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: var(--product-transition);
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--product-primary);
+    box-shadow: 0 0 0 3px rgba(126, 63, 242, 0.15);
+}
+
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--product-gray);
+}
+
+.filter-controls {
+    display: flex;
+    gap: 15px;
+}
+
+.filter-controls select {
+    padding: 12px 15px;
+    border: 1px solid var(--product-border);
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: white;
+    cursor: pointer;
+    transition: var(--product-transition);
+}
+
+.filter-controls select:focus {
+    outline: none;
+    border-color: var(--product-primary);
+    box-shadow: 0 0 0 3px rgba(126, 63, 242, 0.15);
+}
+
+.btn-add-product {
+    background-color: var(--product-primary);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--product-transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-add-product:hover {
+    background-color: #6a34d9;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Tabla de productos */
+.products-table-container {
+    margin-bottom: 40px;
+    overflow-x: auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: var(--product-shadow);
+}
+
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.products-table th,
+.products-table td {
+    padding: 15px;
+    text-align: left;
+}
+
+.products-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: var(--product-dark);
+}
+
+.products-table tbody tr {
+    border-bottom: 1px solid var(--product-border);
+    transition: var(--product-transition);
+}
+
+.products-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.products-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* Celdas específicas */
+.products-table .cell-image {
+    width: 80px;
+}
+
+.products-table .cell-image img {
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.products-table .cell-price,
+.products-table .cell-discount,
+.products-table .cell-stock {
+    text-align: center;
+}
+
+.products-table .cell-actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Indicadores de stock */
+.stock-indicator {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.stock-indicator.in-stock {
+    background-color: #d4f8e8;
+    color: #1b9e5a;
+}
+
+.stock-indicator.low-stock {
+    background-color: #fff4de;
+    color: #e5950e;
+}
+
+.stock-indicator.out-of-stock {
+    background-color: #ffe1e3;
+    color: #b81f2c;
+}
+
+/* Botones de acción */
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-left: 5px;
+    border-radius: 4px;
+    transition: var(--product-transition);
+}
+
+.action-btn.btn-edit {
+    color: #1665d8;
+}
+
+.action-btn.btn-edit:hover {
+    background-color: #e8f1fd;
+}
+
+.action-btn.btn-delete {
+    color: #b81f2c;
+}
+
+.action-btn.btn-delete:hover {
+    background-color: #ffe1e3;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--product-transition);
+}
+
+.modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--product-shadow);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--product-border);
+}
+
+.modal-header h3 {
+    font-size: 1.3rem;
+    color: var(--product-dark);
+    margin: 0;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--product-gray);
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: var(--product-dark);
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* Formulario */
+.form-row {
+    margin-bottom: 20px;
+}
+
+.form-row.two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 5px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--product-dark);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--product-border);
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: var(--product-transition);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--product-primary);
+    box-shadow: 0 0 0 3px rgba(126, 63, 242, 0.15);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-secondary {
+    background-color: #f1f2f6;
+    color: var(--product-dark);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--product-transition);
+}
+
+.btn-secondary:hover {
+    background-color: #e3e3e3;
+}
+
+.btn-danger {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--product-transition);
+}
+
+.btn-danger:hover {
+    background-color: #ff5252;
+}
+
+/* Mensaje de no hay productos */
+.no-products-message {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: var(--product-shadow);
+}
+
+.no-products-message i {
+    font-size: 4rem;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.no-products-message p {
+    font-size: 1.2rem;
+    color: var(--product-gray);
+    margin-bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-controls {
+        flex-direction: column;
+    }
+    
+    .form-row.two-columns {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions button {
+        width: 100%;
+    }
+}

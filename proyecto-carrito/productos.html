@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechShop - Administrar Productos</title>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Nuestros estilos -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/productos.css">
+</head>
+<body>
+    <!-- Cabecera -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Tech<span>Shop</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="productos.html" class="active">Productos</a></li>
+                    <li><a href="ofertas.html">Ofertas</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="providers.html" class="provider-link">Proveedores</a></li>
+                </ul>
+            </nav>
+            <div class="cart-icon">
+                <div class="cart-count">0</div>
+                <i class="fas fa-shopping-cart" id="cart-btn"></i>
+            </div>
+            <div class="user-actions hidden" id="user-actions">
+                <div class="user-menu">
+                    <button class="user-menu-btn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="user-name">Usuario</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="profile.html"><i class="fas fa-user"></i> Mi Perfil</a>
+                        <a href="#"><i class="fas fa-shopping-bag"></i> Mis Pedidos</a>
+                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+            <div class="auth-buttons" id="auth-buttons">
+                <a href="login.html" class="btn btn-sm">Iniciar Sesión</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <div class="products-admin-container">
+        <div class="container">
+            <div class="products-admin-header">
+                <h2>Administración de Productos</h2>
+                <p>Gestiona el catálogo de productos de la tienda</p>
+            </div>
+            
+            <!-- Controles de administración -->
+            <div class="admin-controls">
+                <div class="search-box">
+                    <input type="text" id="search-product" placeholder="Buscar producto..." aria-label="Buscar producto">
+                    <i class="fas fa-search"></i>
+                </div>
+                
+                <div class="filter-controls">
+                    <select id="category-filter">
+                        <option value="all">Todas las categorías</option>
+                        <option value="smartphones">Smartphones</option>
+                        <option value="laptops">Laptops</option>
+                        <option value="audio">Audio</option>
+                        <option value="accessories">Accesorios</option>
+                    </select>
+                    
+                    <select id="stock-filter">
+                        <option value="all">Todos los productos</option>
+                        <option value="in-stock">En stock</option>
+                        <option value="low-stock">Poco stock</option>
+                        <option value="out-of-stock">Agotados</option>
+                    </select>
+                </div>
+                
+                <button id="add-product-btn" class="btn-add-product">
+                    <i class="fas fa-plus"></i> Agregar producto
+                </button>
+            </div>
+            
+            <!-- Tabla de productos -->
+            <div class="products-table-container">
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Descuento</th>
+                            <th>Stock</th>
+                            <th>Categoría</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body">
+                        <!-- Se llenará dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Mensaje de no hay productos -->
+            <div id="no-products-message" class="no-products-message" style="display: none;">
+                <i class="fas fa-box-open"></i>
+                <p>No se encontraron productos</p>
+                <button class="btn" id="add-first-product-btn">Agregar primer producto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para agregar/editar producto -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Agregar Producto</h3>
+                <button class="close-modal" id="close-product-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="product-form">
+                    <input type="hidden" id="product-id">
+                    
+                    <div class="form-row two-columns">
+                        <div class="form-group">
+                            <label for="product-name">Nombre</label>
+                            <input type="text" id="product-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-price">Precio</label>
+                            <input type="number" id="product-price" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row two-columns">
+                        <div class="form-group">
+                            <label for="product-original-price">Precio original (opcional)</label>
+                            <input type="number" id="product-original-price" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="product-discount">Descuento % (opcional)</label>
+                            <input type="number" id="product-discount" min="0" max="100">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row two-columns">
+                        <div class="form-group">
+                            <label for="product-stock">Stock</label>
+                            <input type="number" id="product-stock" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-category">Categoría</label>
+                            <select id="product-category" required>
+                                <option value="">Selecciona una categoría</option>
+                                <option value="smartphones">Smartphones</option>
+                                <option value="laptops">Laptops</option>
+                                <option value="audio">Audio</option>
+                                <option value="accessories">Accesorios</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="product-image">URL de imagen</label>
+                            <input type="url" id="product-image" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="product-description">Descripción</label>
+                            <textarea id="product-description" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row two-columns">
+                        <div class="form-group">
+                            <label for="product-rating">Valoración (1-5)</label>
+                            <input type="number" id="product-rating" min="1" max="5" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-reviews">Número de reseñas</label>
+                            <input type="number" id="product-reviews" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="cancel-product-btn" class="btn-secondary">Cancelar</button>
+                        <button type="submit" class="btn">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de confirmación para eliminar -->
+    <div id="confirm-delete-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmar eliminación</h3>
+                <button class="close-modal" id="close-confirm-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar el producto <strong id="delete-product-name"></strong>?</p>
+                <p>Esta acción no se puede deshacer.</p>
+                
+                <div class="form-actions">
+                    <button type="button" id="cancel-delete-btn" class="btn-secondary">Cancelar</button>
+                    <button type="button" id="confirm-delete-btn" class="btn-danger">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <h2>Tech<span>Shop</span></h2>
+                    </div>
+                    <p>La mejor tienda de tecnología con los mejores precios y ofertas exclusivas.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Enlaces rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="productos.html">Productos</a></li>
+                        <li><a href="ofertas.html">Ofertas</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                        <li><a href="login.html">Mi cuenta</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Categorías</h3>
+                    <ul class="footer-links">
+                        <li><a href="ofertas.html#smartphones">Smartphones</a></li>
+                        <li><a href="ofertas.html#laptops">Laptops</a></li>
+                        <li><a href="ofertas.html#audio">Audio</a></li>
+                        <li><a href="ofertas.html#accessories">Accesorios</a></li>
+                        <li><a href="#">Ver todo</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contacto</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> Av. Universidad 123, Campeche, MX</li>
+                        <li><i class="fas fa-phone"></i> (981) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@techshop.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 TechShop. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Carrito de compras (oculto inicialmente) -->
+    <div class="cart-overlay" id="cart-overlay">
+        <div class="cart">
+            <div class="cart-header">
+                <h3>Tu Carrito</h3>
+                <button class="close-cart" id="close-cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Los items del carrito se cargarán dinámicamente -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-summary">
+                    <div class="summary-item">
+                        <span>Subtotal:</span>
+                        <span id="cart-subtotal">$0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>IVA (16%):</span>
+                        <span id="cart-tax">$0.00</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span>Total:</span>
+                        <span id="cart-total">$0.00</span>
+                    </div>
+                </div>
+                <div class="cart-buttons">
+                    <button class="btn btn-clear" id="clear-cart">Vaciar carrito</button>
+                    <button class="btn" id="checkout-btn">Finalizar Compra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Indicador de modo Sandbox -->
+    <div class="sandbox-indicator">
+        Modo de Pruebas (Sandbox)
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/products.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/productos.js"></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechShop - Panel de Proveedores</title>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Nuestros estilos -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/providers.css">
+</head>
+<body>
+    <!-- Cabecera -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>Tech<span>Shop</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="ofertas.html">Ofertas</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="providers.html" class="provider-link active">Proveedores</a></li>
+                </ul>
+            </nav>
+            <div class="user-actions">
+                <div class="user-menu">
+                    <button class="user-menu-btn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="user-name">Usuario</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="profile.html"><i class="fas fa-user"></i> Mi Perfil</a>
+                        <a href="#"><i class="fas fa-shopping-bag"></i> Mis Pedidos</a>
+                        <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido del panel de proveedores -->
+    <div class="providers-container">
+        <div class="container">
+            <div class="providers-header">
+                <h2>Panel de Proveedores</h2>
+                <p>Bienvenido(a), <span id="provider-name">Proveedor</span>. Gestiona tu inventario y reabastece productos.</p>
+            </div>
+            
+            <!-- Estadísticas de stock -->
+            <div class="stock-statistics" id="stock-statistics">
+                <!-- Se cargarán dinámicamente -->
+            </div>
+            
+            <!-- Filtros de productos -->
+            <div class="products-filters">
+                <h3>Filtrar productos</h3>
+                <div class="filter-buttons">
+                    <button id="filter-all" class="filter-btn active">Todos</button>
+                    <button id="filter-low" class="filter-btn">Poco Stock</button>
+                    <button id="filter-out" class="filter-btn">Agotados</button>
+                </div>
+            </div>
+            
+            <!-- Lista de productos -->
+            <div class="products-list" id="products-list">
+                <!-- Se cargarán dinámicamente -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de reabastecimiento -->
+    <div id="restock-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reabastecer Producto</h3>
+                <button class="close-modal" onclick="hideRestockModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Estás reabasteciendo: <strong id="restock-product-name">Nombre del Producto</strong></p>
+                
+                <form id="restock-form" class="restock-form">
+                    <input type="hidden" id="restock-product-id">
+                    
+                    <div class="form-group">
+                        <label for="restock-quantity">Cantidad a añadir</label>
+                        <input type="number" id="restock-quantity" min="1" placeholder="Ingresa la cantidad" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="hideRestockModal()">Cancelar</button>
+                        <button type="submit" class="btn">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Indicador de modo Sandbox -->
+    <div class="sandbox-indicator">
+        Modo de Pruebas
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/products.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/providers.js"></script>
+</body>
+</html>
