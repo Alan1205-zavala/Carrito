@@ -88,6 +88,18 @@ function setupEventListeners() {
         restockForm.addEventListener('submit', handleRestockSubmit);
     }
     
+    // Event listener para cerrar modal
+    const closeModalBtn = document.querySelector('.close-modal');
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', hideRestockModal);
+    }
+    
+    // Event listener para botón cancelar en modal
+    const cancelRestock = document.querySelector('.btn-secondary');
+    if (cancelRestock) {
+        cancelRestock.addEventListener('click', hideRestockModal);
+    }
+    
     // Event listener para logout
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
@@ -233,6 +245,8 @@ function updateStockStatistics() {
 
 // Mostrar modal de reabastecimiento
 function showRestockModal(productId, productName) {
+    console.log(`Mostrando modal para reabastecer ${productName} (ID: ${productId})`);
+    
     // Completar datos en el formulario de reabastecimiento
     restockProductId.value = productId;
     
@@ -248,12 +262,14 @@ function showRestockModal(productId, productName) {
 
 // Ocultar modal de reabastecimiento
 function hideRestockModal() {
+    console.log("Ocultando modal de reabastecimiento");
     document.getElementById('restock-modal').classList.remove('show');
 }
 
 // Manejar envío del formulario de reabastecimiento
 function handleRestockSubmit(event) {
     event.preventDefault();
+    console.log("Procesando reabastecimiento...");
     
     // Obtener datos del formulario
     const productId = parseInt(restockProductId.value);
@@ -274,16 +290,13 @@ function handleRestockSubmit(event) {
         return;
     }
     
+    console.log(`Reabasteciendo producto ${products[productIndex].name}: añadiendo ${quantity} unidades al stock actual de ${products[productIndex].stock}`);
+    
     // Actualizar stock
     products[productIndex].stock += quantity;
     
     // Guardar datos en localStorage para que persistan
     localStorage.setItem('products', JSON.stringify(products));
-    
-    // Actualizar visualización de productos en la página principal si está disponible
-    if (typeof displayProducts === 'function') {
-        displayProducts();
-    }
     
     // Actualizar UI
     updateProductsList();

@@ -81,7 +81,8 @@ function setupCartButtons() {
     cartButtons.appendChild(cartCheckoutBtn);
     
     // Agregar botón de simulación de pago (solo si estamos en la página principal)
-    if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('index.html') || currentPath.endsWith('/') || currentPath.endsWith('/proyecto-carrito/')) {
         simulatePaymentBtn = document.createElement('button');
         simulatePaymentBtn.id = 'simulate-payment-btn';
         simulatePaymentBtn.className = 'btn';

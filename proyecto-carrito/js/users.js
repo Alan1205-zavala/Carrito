@@ -1,4 +1,4 @@
-// Sistema de gestión de usuarios
+// Clase para manejar usuarios
 
 // Definir estructura de usuarios predeterminados
 const defaultUsers = [
