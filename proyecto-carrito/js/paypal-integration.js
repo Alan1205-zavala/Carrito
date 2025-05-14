@@ -162,6 +162,9 @@ function initPayPalButton() {
                 // Obtener detalles de la transacción
                 const transaction = orderData.purchase_units[0].payments.captures[0];
                 
+                // Actualizar el stock de productos
+                updateProductStock(cart);
+                
                 // Mostrar mensaje de éxito
                 showToast(`Pago completado correctamente con ID: ${transaction.id}`, 'success');
                 
@@ -334,6 +337,9 @@ function simulateSuccessfulPayment() {
     mockOrderData.purchase_units[0].amount.breakdown.item_total.value = itemTotalString;
     mockOrderData.purchase_units[0].amount.breakdown.tax_total.value = taxValue;
     mockOrderData.purchase_units[0].payments.captures[0].amount.value = totalValue;
+    
+    // Actualizar el stock de los productos
+    updateProductStock(cart);
     
     // Mostrar mensaje de éxito
     showToast(`Pago simulado completado correctamente con ID: ${mockOrderData.id}`, 'success');

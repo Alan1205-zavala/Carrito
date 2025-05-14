@@ -277,8 +277,13 @@ function handleRestockSubmit(event) {
     // Actualizar stock
     products[productIndex].stock += quantity;
     
-    // Guardar datos (en este caso solo simulamos, en un sistema real se enviaría al servidor)
+    // Guardar datos en localStorage para que persistan
     localStorage.setItem('products', JSON.stringify(products));
+    
+    // Actualizar visualización de productos en la página principal si está disponible
+    if (typeof displayProducts === 'function') {
+        displayProducts();
+    }
     
     // Actualizar UI
     updateProductsList();

@@ -6,7 +6,7 @@ let cartBtn, closeCartBtn, clearCartBtn, cartOverlay, cartItems, cartSubtotal, c
 const taxRate = 0.16; // 16% de IVA
 
 // Variables para almacenar referencias a elementos DOM
-let cartCheckoutBtn;
+let cartCheckoutBtn, simulatePaymentBtn;
 
 // Inicializar al cargar el DOM
 document.addEventListener('DOMContentLoaded', () => {
@@ -35,31 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Crear botón de checkout si no existe
-    const cartFooter = document.querySelector('.cart-footer');
-    if (cartFooter) {
-        // Verificar si ya existe el botón de PayPal
-        const paypalContainer = document.getElementById('paypal-button-container');
-        
-        // Crear botón de checkout
-        cartCheckoutBtn = document.createElement('button');
-        cartCheckoutBtn.className = 'btn';
-        cartCheckoutBtn.style.width = '100%';
-        cartCheckoutBtn.style.marginBottom = '10px';
-        cartCheckoutBtn.textContent = 'Finalizar Compra';
-        cartCheckoutBtn.addEventListener('click', proceedToCheckout);
-        
-        // Insertar antes del contenedor de PayPal
-        if (paypalContainer) {
-            cartFooter.insertBefore(cartCheckoutBtn, paypalContainer);
-        } else {
-            // Si no hay contenedor de PayPal, agregarlo al final
-            const cartButtons = document.querySelector('.cart-buttons');
-            if (cartButtons) {
-                cartButtons.appendChild(cartCheckoutBtn);
-            }
-        }
-    }
+    // Configurar botones de carrito
+    setupCartButtons();
     
     // Verificar si hay usuario autenticado
     checkAuthStatus();
@@ -78,6 +55,177 @@ document.addEventListener('DOMContentLoaded', () => {
         'Productos disponibles': products
     });
 });
+
+// Configurar botones del carrito
+function setupCartButtons() {
+    const cartButtons = document.querySelector('.cart-buttons');
+    if (!cartButtons) return;
+
+    // Limpiar botones existentes para evitar duplicados
+    cartButtons.innerHTML = '';
+    
+    // Agregar botón para vaciar carrito
+    const clearCartBtn = document.createElement('button');
+    clearCartBtn.id = 'clear-cart';
+    clearCartBtn.className = 'btn btn-clear';
+    clearCartBtn.textContent = 'Vaciar carrito';
+    clearCartBtn.addEventListener('click', clearCart);
+    cartButtons.appendChild(clearCartBtn);
+    
+    // Agregar botón para finalizar compra
+    cartCheckoutBtn = document.createElement('button');
+    cartCheckoutBtn.id = 'checkout-btn';
+    cartCheckoutBtn.className = 'btn';
+    cartCheckoutBtn.textContent = 'Finalizar Compra';
+    cartCheckoutBtn.addEventListener('click', proceedToCheckout);
+    cartButtons.appendChild(cartCheckoutBtn);
+    
+    // Agregar botón de simulación de pago (solo si estamos en la página principal)
+    if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
+        simulatePaymentBtn = document.createElement('button');
+        simulatePaymentBtn.id = 'simulate-payment-btn';
+        simulatePaymentBtn.className = 'btn';
+        simulatePaymentBtn.style.backgroundColor = '#ff9f43';
+        simulatePaymentBtn.style.marginTop = '10px';
+        simulatePaymentBtn.style.width = '100%';
+        simulatePaymentBtn.textContent = 'Simular pago exitoso';
+        simulatePaymentBtn.addEventListener('click', simulateSuccessfulPayment);
+        cartButtons.appendChild(simulatePaymentBtn);
+    }
+}
+
+// Función para actualizar el stock después de una compra
+function updateProductStock(purchasedItems) {
+    console.log("Actualizando stock para items:", purchasedItems);
+    
+    // Recorrer todos los items comprados
+    purchasedItems.forEach(item => {
+        // Buscar el producto en el inventario
+        const productIndex = products.findIndex(product => product.id === item.id);
+        
+        if (productIndex !== -1) {
+            console.log(`Producto ${products[productIndex].name}: stock actual = ${products[productIndex].stock}, cantidad comprada = ${item.quantity}`);
+            
+            // Reducir el stock según la cantidad comprada
+            products[productIndex].stock -= item.quantity;
+            
+            // Asegurar que el stock no sea negativo
+            if (products[productIndex].stock < 0) {
+                products[productIndex].stock = 0;
+            }
+            
+            console.log(`Nuevo stock: ${products[productIndex].stock}`);
+        }
+    });
+    
+    // Guardar los productos actualizados en localStorage
+    localStorage.setItem('products', JSON.stringify(products));
+    console.log("Productos actualizados guardados en localStorage");
+    
+    // Actualizar visualización si estamos en la página de productos
+    if (typeof displayProducts === 'function') {
+        displayProducts();
+    }
+}
+
+// Simular un pago exitoso
+function simulateSuccessfulPayment() {
+    console.log("Simulando pago exitoso");
+    
+    // Verificar que haya productos en el carrito
+    if (cart.length === 0) {
+        showToast('El carrito está vacío', 'warning');
+        return;
+    }
+    
+    // Crear un objeto similar a lo que devolvería PayPal
+    const mockOrderData = {
+        id: 'SIMULATED-' + Math.floor(Math.random() * 1000000).toString(),
+        status: 'COMPLETED',
+        create_time: new Date().toISOString(),
+        update_time: new Date().toISOString(),
+        payer: {
+            name: {
+                given_name: 'Cliente',
+                surname: 'Simulado'
+            },
+            email_address: 'cliente.simulado@example.com',
+            payer_id: 'SIMULATEDPAYER'
+        },
+        purchase_units: [
+            {
+                description: 'Compra en TechShop (SIMULACIÓN)',
+                reference_id: 'default',
+                soft_descriptor: 'TECHSHOP',
+                amount: {
+                    currency_code: 'MXN',
+                    value: '0.00', // Se actualizará
+                    breakdown: {
+                        item_total: {
+                            currency_code: 'MXN',
+                            value: '0.00' // Se actualizará
+                        },
+                        tax_total: {
+                            currency_code: 'MXN',
+                            value: '0.00' // Se actualizará
+                        }
+                    }
+                },
+                payee: {
+                    merchant_id: 'SIMULATEDMERCHANT',
+                    email_address: 'comercio@example.com'
+                },
+                payments: {
+                    captures: [
+                        {
+                            id: 'SIMCAPTURE-' + Math.floor(Math.random() * 1000000).toString(),
+                            status: 'COMPLETED',
+                            amount: {
+                                currency_code: 'MXN',
+                                value: '0.00' // Se actualizará
+                            },
+                            final_capture: true,
+                            create_time: new Date().toISOString(),
+                            update_time: new Date().toISOString()
+                        }
+                    ]
+                }
+            }
+        ]
+    };
+    
+    // Calcular los totales del carrito
+    const subtotal = cart.reduce((total, item) => {
+        return total + (parseFloat(item.price) * item.quantity);
+    }, 0);
+    
+    const tax = subtotal * taxRate;
+    const total = subtotal + tax;
+    
+    // Actualizar los valores en el objeto simulado
+    mockOrderData.purchase_units[0].amount.value = total.toFixed(2);
+    mockOrderData.purchase_units[0].amount.breakdown.item_total.value = subtotal.toFixed(2);
+    mockOrderData.purchase_units[0].amount.breakdown.tax_total.value = tax.toFixed(2);
+    mockOrderData.purchase_units[0].payments.captures[0].amount.value = total.toFixed(2);
+    
+    // Actualizar el stock de los productos
+    updateProductStock(cart);
+    
+    // Mostrar mensaje de éxito
+    showToast(`Pago simulado completado correctamente con ID: ${mockOrderData.id}`, 'success');
+    
+    // Generar recibo
+    generateReceipt(mockOrderData);
+    
+    // Vaciar carrito
+    clearCart();
+    
+    // Ocultar carrito
+    hideCart();
+    
+    // Mostrar modal de recibo
+    showReceiptModal();
+}
 
 // Verificar estado de autenticación
 function checkAuthStatus() {
@@ -212,7 +360,9 @@ function addToCart(productId) {
     }, 300);
     
     // Actualizar la visualización de los productos (para mostrar stock actualizado)
-    displayProducts();
+    if (typeof displayProducts === 'function') {
+        displayProducts();
+    }
 }
 
 function removeFromCart(productId) {
@@ -250,7 +400,9 @@ function updateItemQuantity(productId, quantity) {
     }
     
     // Actualizar la visualización de los productos
-    displayProducts();
+    if (typeof displayProducts === 'function') {
+        displayProducts();
+    }
 }
 
 function clearCart() {
@@ -263,18 +415,13 @@ function clearCart() {
 function updateCart() {
     // Actualizar contador del carrito
     const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-    cartCount.textContent = totalItems;
+    if (cartCount) cartCount.textContent = totalItems;
     
     // Actualizar items en el carrito
     renderCartItems();
     
     // Calcular totales
     calculateTotals();
-    
-    // Actualizar estado del botón de paypal
-    if (typeof updatePayPalButton === 'function') {
-        updatePayPalButton();
-    }
 }
 
 function renderCartItems() {
@@ -438,6 +585,11 @@ function loadCart() {
             localStorage.removeItem('shopping-cart');
         }
     }
+}
+
+// Función para encontrar un producto por ID
+function findProductById(id) {
+    return products.find(product => product.id === id);
 }
 
 // Función para mostrar notificaciones
